@@ -1,0 +1,82 @@
+notes:
+
+TO DO:
+- macro va functions:
+	- macro is a name given to a block of C statements as a preprocesser directive
+		- block of code is communicated to the compiler before entering into the actual coding (main function)
+	- processed before you program compiles
+	- functions are not pre processed but compiled
+	- in macros...
+		- no type checking is does (incompatible operands for example)
+		- can lead to errors that you wouldn't see with a function
+		- macros do not check for compilation errors... so basically make sure your macros are def working 
+		- macros are no longer recommended
+			- can cause issues
+			- There is no type checking
+			- Difficult to debug as they cause simple replacement
+			- Macro don’t have namespace, so a macro in one section of code can affect other section
+			- Macros can cause side effects
+	- https://www.geeksforgeeks.org/macros-vs-functions/
+- ori vs addi in n64_init()
+- PIF
+	- peripiheral interface -- component of the N64 console
+	- responsible for managing communication between various peripherals and the N64's main processor
+	- https://n64brew.dev/wiki/PIF-NUS
+	- in charge of setting stuff up, checking check sum, then basically just in charge of controller input
+	- also in charge of if the user presses the reset button
+	- but why those specific numbers? i think the fraser mips table will b helpful decoding that
+- waitScanline
+- algin()
+	- what is pc()
+		- program counter
+		- "The align macro takes a size parameter and inserts a loop that pads the code with zero bytes until the program counter (pc()) is aligned to the specified size" **********
+	- run file with it commented out on the console
+
+- WaitScanline is from the GFX LIB file
+- investigating this file.
+	- ScreenNTSC() is also from this file- looks like my video initialization, but as a function thats being imported
+
+OKAY, we're going on a journey... to break down all of peter lemon's imported functions/connect them with fraser mips code
+
+1. N64_INIT()
+	- from N64.INC in lib
+	- macro? that must mean something like public? or maybe it overrrides other functions with the same name?
+	- **** TO DO: WHAT IS MACRO? ******
+	- equivalent to fraser mips's first three lines after start
+		- peter loads PIF_BASE into a0, fraser mips prefers to use t0
+		- ori vs addi? hmm 
+		- *** TO DO: COULD THESE ACT THE SAME IN THIS CASE? ****
+
+2. ScreenNTSC(width, height, status, origin)
+	- gfx
+	- fraser's video init routine, but fraser's is simplified
+	- wonder if some of this might need to change to work correctly on the console? keep in mind
+
+3. not a function - just making a note that he sets the frame buffer next with loop called ClearScreen
+
+4. InitController(PIF)
+	- input
+	- what is she up to?
+
+5. WaitScanline(scanline) ********
+	- gfx
+	- wait for RDP to reach scanline
+	- not really sure what is up here- def investigate
+
+6. ReadController(PIF) **** key is understanding PIF and understanding how im passing multiple things in like that...
+	- input
+	- what is she up to?
+	- jump used as variable? like label and then stuff, so variable but a label? huh
+	- dw "define word" 16 bit space/value
+	- the code doesn't have a data section where it declares variables?
+	- also no text section? just a start section (this is the main)
+
+7. align() *****
+	- from N64.INC in lib
+	- no clue whats up here
+	- align byte amount??
+	- code runs with this commented out? so like whats up with that team
+	- try it on the console to see if there is still no difference *****
+	- what is pc()?
+
+8. what are the PIF1 and PIF2 loops up to?

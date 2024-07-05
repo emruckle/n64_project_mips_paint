@@ -1,0 +1,47 @@
+// Notes:
+// fastest memory is the registers themselves
+	// absolute center of the CPU
+// cache
+	// instruction cache and a data cache
+// normal RAM
+// card memory
+// 32 general purpose registers, each can hold a 64 bit value (or 8 bytes of data)
+	// 2 have special behavior, the first and the last, 0 and 31
+	// other 30 are available for any use, but there are some conventions
+// n64dev.org...
+	// have lots of resources like a register reference sheet
+// can't write to r0, it's always 0, but you can use this to your advanatge especially in comparisons
+
+
+// instructions always at the beginning of the line, and then up to 4 parameters
+// instructions usually read right to left
+// sw means store
+// can draw boxes with something like 15 instructions
+
+// registers use sign extension
+// whatever is in the top bit of the first 32 gets extended output
+	// usually doesn't matter
+
+// N64 Lesson 02 Simple Initialize
+arch n64.cpu
+endian msb
+output "Video003.N64", create
+// 1024 KB + 4 KB = 1028 KB
+fill $0010'1000 // Set ROM Size
+
+origin $00000000
+base $80000000
+
+include "../LIB/N64.INC"
+include "../LIB/N64_GFX.INC"
+include "N64_Header.asm"
+insert "../LIB/N64_BOOTCODE.BIN"
+
+Start:	                 // NOTE: base $80001000
+	lui t0, PIF_BASE     // t0 = $BFC0 << 16	
+	addi t1, zero, 8	// t1 = 0 + 8, example of how you can use the zero register
+	sw t1, PIF_CTRL(t0)  // 0xBFC007FC = 8, take the value, store it in t1
+	
+Loop:  // while(true); : tells the assembler that Loop is a jump instruction, you've seen this before
+	j Loop
+	nop
