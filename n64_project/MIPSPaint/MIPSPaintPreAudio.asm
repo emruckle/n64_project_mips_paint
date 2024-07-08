@@ -10,6 +10,7 @@
 // - look into drawing rectangles with rdp
 // ---------------------------------------------------------------------------------------------------------------------------------
 
+// this is me commenting to test github desktop
 arch n64.cpu
 endian msb
 output "MIPSPaint.N64", create
