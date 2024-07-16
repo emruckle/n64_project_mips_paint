@@ -1,4 +1,3 @@
 #!/bin/bash
-cd ../test
-~/n64_project/bass/bass/out/bass checkBounds.asm
-./chksum64 checkBounds.N64
+~/n64_tools/bass/bass/out/bass RDPInputTest.asm
+./chksum64 RDPInputTest.N64

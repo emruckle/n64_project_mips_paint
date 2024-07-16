@@ -102,5 +102,4 @@ macro colorSelection() {
 	add t9, r0, v0
 }
 
-macro 
 
