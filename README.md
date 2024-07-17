@@ -2,9 +2,10 @@
 - n64 drawing game written in MIPS assembly
 
 ## organization
-- google docs documentation: https://docs.google.com/document/d/1s7vKO463_OQ9mpoaeQHdbQTE42Aou_AvrzSs5XP5OHU/edit?usp=sharing
+- google docs notes: https://docs.google.com/document/d/1s7vKO463_OQ9mpoaeQHdbQTE42Aou_AvrzSs5XP5OHU/edit?usp=sharing
   - initial setup and drawing lines (MAME install, bass install, bass linking, chksum)
-- notion documentation: [https://likeable-asphalt-1dd.notion.site/N64-Research-Notes-8ae565fd8d04497682f657483bfe7017?pvs=4](https://likeable-asphalt-1dd.notion.site/0a470ff044644fcf8ff0c73c128905b4?v=8f5f4c12b2284285ae02347b4474164c&pvs=4)
+- notion notes: [https://likeable-asphalt-1dd.notion.site/N64-Research-Notes-8ae565fd8d04497682f657483bfe7017?pvs=4](https://likeable-asphalt-1dd.notion.site/0a470ff044644fcf8ff0c73c128905b4?v=8f5f4c12b2284285ae02347b4474164c&pvs=4)
+- notion online resource list: [https://likeable-asphalt-1dd.notion.site/N64-Resources-4ce68d1f433b42e9bb5b58bf955faebf?pvs=4](https://likeable-asphalt-1dd.notion.site/N64-Resources-4ce68d1f433b42e9bb5b58bf955faebf?pvs=4)
   - coprocessors (RCP, RDRAM, PIF-NUS, Video Dac), DMA, I/O interfaces (VI, AI, MI, PI, SI, RI), joybus protocol, controllers
   - brain dump (everything post drawing lines -> RDP)
   - RDP 2D exploration
