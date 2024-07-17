@@ -1,4 +1,4 @@
-// N64 'Bare Metal' 32BPP 320x240 Hello World Demo by krom (Peter Lemon):
+// N64 'Bare Metal' 32BPP 320x240 Hello World Demo by krom (Peter Lemon) played with by me
 arch n64.cpu
 endian msb
 output "FontTest2.N64", create

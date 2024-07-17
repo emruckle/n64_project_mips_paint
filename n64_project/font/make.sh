@@ -1,3 +1,3 @@
 #!/bin/bash
-~/n64_tools/bass/bass/out/bass FontTest.asm
-./chksum64 FontTest.N64
+~/n64_project/bass/bass/out/bass Video009.asm
+./chksum64 Video009.N64

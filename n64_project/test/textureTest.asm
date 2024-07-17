@@ -1,4 +1,4 @@
-// N64 'Bare Metal' 32BPP 320x240 Cycle1 Texture Rectangle RGBA16B RDP Demo by krom (Peter Lemon):
+// N64 'Bare Metal' 32BPP 320x240 Cycle1 Texture Rectangle RGBA16B RDP Demo by krom (Peter Lemon) played with by me
 arch n64.cpu
 endian msb
 output "textureTest.N64", create

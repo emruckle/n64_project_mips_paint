@@ -1,5 +1,5 @@
 //=============
-// N64 Include
+// N64 Include by Peter Lemon
 //=============
 // N64 MIPS 4300 CPU Registers
 constant r0 = 0

@@ -1,3 +1,4 @@
+// drawing sprites with cpu
 arch n64.cpu
 endian msb
 output "paintbrush.N64", create

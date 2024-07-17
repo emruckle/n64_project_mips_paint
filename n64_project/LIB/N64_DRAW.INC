@@ -1,4 +1,4 @@
-// emma'a include file
+// emma'a include file (old, used in some tests but not in MIPS Paint)
 
 constant framebuffer = $A0100000
 //constant framebufferEnd = $A014B000

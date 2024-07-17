@@ -15,7 +15,7 @@ db "CRC2"
 
 dd 0
 
-db   "N64 Font Test              "
+db   "N64 Video 009              "
 //   "123456789012345678901234567"
 
 db $00 // Dev Id

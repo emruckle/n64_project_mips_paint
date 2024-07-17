@@ -1,6 +1,7 @@
 // COLOR names used from
 // http://etetoolkit.org/docs/2.3/reference/reference_treeview.html#color-names
 // Red Colors
+// By Peter Lemon
 constant INDIAN_RED16 = $CAD6 
 constant LIGHT_CORAL16 = $F420
 constant SALMON16 = $FC1C

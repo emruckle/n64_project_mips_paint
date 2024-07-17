@@ -1,3 +1,5 @@
+// drawing color select palette with cpu
+
 arch n64.cpu
 endian msb
 output "colorSelect.N64", create

@@ -1,3 +1,4 @@
+// early iteration of mips paint
 arch n64.cpu
 endian msb
 output "draw.N64", create

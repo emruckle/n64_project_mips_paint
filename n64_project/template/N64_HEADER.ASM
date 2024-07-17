@@ -1,6 +1,6 @@
-//============
-// N64 Header
-//============
+//=====================
+// N64 Header TEMPLATE
+//=====================
 // PI_BSB_DOM1
   db $80 // Initial PI_BSB_DOM1_LAT_REG Value
   db $37 // Initial PI_BSB_DOM1_PGS_REG Value

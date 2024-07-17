@@ -1,5 +1,5 @@
 //===========
-// N64 Input
+// N64 Input by Peter Lemon
 //===========
 constant JOY_CRIGHT = $1  // PIF HWORD: CAMERA RIGHT
 constant JOY_CLEFT = $2    // PIF HWORD: CAMERA LEFT

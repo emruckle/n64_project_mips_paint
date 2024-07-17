@@ -1,4 +1,4 @@
-// check in to see if i've properly understood videos 1-6
+// checking bounds on console/emulator in 32bpp
 
 arch n64.cpu
 endian msb

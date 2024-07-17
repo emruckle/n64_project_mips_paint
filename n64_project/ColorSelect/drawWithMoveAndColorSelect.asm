@@ -1,4 +1,6 @@
-// drawWithMoveAndColorSelect.asm -> drawWithMoveAndColorSelect.N64
+// this is an old draft of mipsPaint.asm, before it was broken down into .INC files
+// has color select
+//drawWithMoveAndColorSelect.asm -> drawWithMoveAndColorSelect.N64
 // user can draw on screen using dpad
 // user's lines cannot leave the bounds of what is visible on the monitor
 // user can toggle between draw and erase and move using c-up, c-down and c-right

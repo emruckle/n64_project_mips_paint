@@ -1,4 +1,5 @@
 // drawButBetter.asm -> drawButBetter.N64
+// replaces peter lemon's WaitScanline with interrupt handling
 // user can draw on screen using dpad
 // user's pictures cannot leave the bounds of what is visible on the monitor
 // user can toggle between draw and erase using c-up and c-down

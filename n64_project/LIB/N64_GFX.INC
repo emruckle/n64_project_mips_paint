@@ -1,5 +1,5 @@
 //==============
-// N64 Graphics
+// N64 Graphics by Peter Lemon
 //==============
 constant BPP0 = $0000  // VI Status/Control: Color Depth Blank (No Data Or Sync) (Bit 0..1)
 //*RESERVED*($0001)   // VI Status/Control: Color Depth Reserved (Bit 0..1)
@@ -11,10 +11,10 @@ constant DIVOT_EN = $00010   // VI Status/Control: Divot Enable (Used With Anti-
 constant VBUS_CLK_EN = $00020 // VI Status/Control: Video Bus Clock Enable (Bit 5)
 constant INTERLACE = $00040 // VI Status/Control: Interlace/Serrate (Used With Interlaced Display) (Bit 6)
 constant TST_MODE = $00080  // VI Status/Control: Test Mode (Bit 7)
-constant AA_MODE_0 = $00000  // VI Status/Control: AA Mode 0 = Anti­-alias & Resample (Always Fetch Extra Lines) (Bit 8..9)
-constant AA_MODE_1 = $00100 // VI Status/Control: AA Mode 1 = Anti­-alias & Resample (Fetch Extra Lines When Needed) (Bit 8..9)
+constant AA_MODE_0 = $00000  // VI Status/Control: AA Mode 0 = Antiï¿½-aliasï¿½&ï¿½Resample (Always Fetchï¿½Extra Lines) (Bit 8..9)
+constant AA_MODE_1 = $00100 // VI Status/Control: AA Mode 1 = Antiï¿½-aliasï¿½&ï¿½Resample (Fetchï¿½Extra Lines Whenï¿½Needed) (Bit 8..9)
 constant AA_MODE_2 = $00200 // VI Status/Control: AA Mode 2 = Resample Only (Bit 8..9)
-constant AA_MODE_3 = $00300 // VI Status/Control: AA Mode 3 = Replicate Pixels & No Interpolation (Bit 8..9)
+constant AA_MODE_3 = $00300 // VI Status/Control: AA Mode 3 = Replicateï¿½Pixels &ï¿½Noï¿½Interpolation (Bit 8..9)
 constant DIAG_0 = $00400    // VI Status/Control: Diagnotic 0 (Bit 10..11)
 constant DIAG_1 = $00800   // VI Status/Control: Diagnotic 1 (Bit 10..11)
 constant PIXEL_ADV_0 = $00000 // VI Status/Control: Pixel Advance 0 (Bit 12..15)
@@ -265,11 +265,11 @@ macro DPC(start,end) { // Run DPC Command Buffer: Start Address, End Address
 
 // Texture_Rectangle: xl,yl, tile, xh,yh, s,t, dsdx,dtdy
 // Word 0: Bottom Right X/Y, Tile ID, Top Left X/Y (Fixed Point 10.2)
-// Word 1: S/T Texture Coordinate Top Left (Fixed Point S.10.5), DsDx Change In S Per Change In X, DtDy Change In T Per Change In Y (Fixed Point S.5.10)
+// Word 1: S/T Texture Coordinate Top Left (Fixed Point S.10.5), DsDx Changeï¿½Inï¿½Sï¿½Perï¿½Changeï¿½Inï¿½X, DtDy Changeï¿½Inï¿½Tï¿½Perï¿½Changeï¿½Inï¿½Y (Fixed Point S.5.10)
 
 // Texture_Rectangle_Flip: xl,yl, tile, xh,yh, s,t, dsdx,dtdy ; Same As Texture Rectangle Except Hardware Swaps S/T & DsDx/DtDy
 // Word 0: Bottom Right X/Y, Tile ID, Top Left X/Y (Fixed Point 10.2)
-// Word 1: S/T Texture Coordinate Top Left (Fixed Point S.10.5), DsDx Change In S Per Change In X, DtDy Change In T Per Change In Y (Fixed Point S.5.10)
+// Word 1: S/T Texture Coordinate Top Left (Fixed Point S.10.5), DsDx Changeï¿½Inï¿½Sï¿½Perï¿½Changeï¿½Inï¿½X, DtDy Changeï¿½Inï¿½Tï¿½Perï¿½Changeï¿½Inï¿½Y (Fixed Point S.5.10)
 
 // Sync_Load: Stall Execution Of Load Commands, Until Preceeding Primitives Completely Finish (Usually Preceed Load Commands)
 

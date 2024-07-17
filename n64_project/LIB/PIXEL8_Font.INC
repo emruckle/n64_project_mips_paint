@@ -3,6 +3,7 @@
 // Tools Used
 // 	https://www.pentacom.jp/pentacom/bitfontmaker2/
 //  http://www.asciitable.com/
+// by Peter Lemon
 
 arch n64.cpu
 endian msb

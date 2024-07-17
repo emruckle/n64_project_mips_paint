@@ -1,4 +1,4 @@
-// check in to see if i've properly understood videos 1-6
+// testing input, changes color of screen with up and down arrows
 
 arch n64.cpu
 endian msb

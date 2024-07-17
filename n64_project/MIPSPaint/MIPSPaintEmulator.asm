@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------------------------------------------------------------
 // N64 Game MIPS Paint by Emma Ruckle
-// Best played on console, does not have full functionalty on an emulator
+// Emulator edition
 // User can draw on the screen using the DPAD, toggle between erase (JOY_CUP), draw (JOY_CDOWN), and move modes (JOY_CRIGHT)
 // User can select colors in the color palette (JOY_CLEFT)
 // User enters game by pressing JOY_START while on title screen

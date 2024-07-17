@@ -1,4 +1,5 @@
-// N64 'Bare Metal' Sound Long Shot Stereo A-Law RDP Demo by krom (Peter Lemon):
+// N64 'Bare Metal' Sound Long Shot Stereo A-Law RDP Demo by krom (Peter Lemon) played around with by me
+// not sure if it is true to peter lemon's file anymore
 arch n64.cpu
 endian msb
 output "brat.N64", create
