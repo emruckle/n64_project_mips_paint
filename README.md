@@ -7,10 +7,11 @@
 - notion documentation: https://likeable-asphalt-1dd.notion.site/N64-Research-Notes-8ae565fd8d04497682f657483bfe7017?pvs=4
   - coprocessors (RCP, RDRAM, PIF-NUS, Video Dac), DMA, I/O interfaces (VI, AI, MI, PI, SI, RI), joybus protocol, controllers
   - brain dump (everything post drawing lines -> RDP)
+  - RDP 2D exploration
   - to do list, reading list, meeting notes
 - in the repo:
   - test files (specific tests have relevant names)
-  - test files have line by line comments
+  - test files are commented
 
 ## resources:
  - peter lemon github: https://github.com/PeterLemon/N64/tree/master
