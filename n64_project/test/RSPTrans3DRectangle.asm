@@ -81,6 +81,7 @@ RSPStart:
 // lqv moves 16 bytes
 // lqv loads multiple ints into the vecors at once
 // tried to remove points and edit this with offsets, was not working correctly but might be the right idea
+// so dh is 2 bytes, so this moves 8 points
   lqv v0[e0],PointX(r0) // V0 = Point X ($000)
   lqv v1[e0],PointY(r0) // V1 = Point Y ($010)
   lqv v2[e0],PointZ(r0) // V2 = Point Z ($020)
@@ -138,12 +139,6 @@ RSPStart:
   vrcp v3[e3],v8[e6] // Result Fraction (Zero), Source Integer (Z6)
   vrcph v9[e6],v3[e3] // Result Integer, Source Fraction (Zero)
 
-  // if i comment out these two lines, one point is not in the correct location
-  // so yes, the number of times this operation is run is directly proportional to the number of points
-  // could this occur in a loop with pointers? seeing as it is the same two operations, just on different registers
-  vrcp v3[e3],v8[e7] // Result Fraction (Zero), Source Integer (Z7)
-  vrcph v9[e7],v3[e3] // Result Integer, Source Fraction (Zero)
-
   // assuming this have to do with the camera?
   vmulf v6,v9[e0] // X = X / Z + (ScreenX / 2)
   vadd v6,v3[e8]
@@ -158,7 +153,8 @@ RSPStart:
   ori a0,r0,PointX // A0 = X Vector DMEM Offset
   ori a1,r0,RectangleZ // A1 = RDP Rectangle XY DMEM Offset
   // if i manipulate this constant, I do not get any errors and can show less than 8 points, but if I remove a point from the point arrays, then I get an error
-  ori t4,r0,7 // T4 = Point Count, constant is 1 less than the number of points you want to draw
+  ori t4,r0,5 // T4 = Point Count, constant is 1 less than the number of points you want to draw
+  // only want to loop 6 times
 
 LoopPoint:
   // what is fixed 10.2 format?
@@ -208,25 +204,13 @@ base $0000 // Set Base Of RSP Data Object To Zero
 // then all the Ys and Zs
 // the pos of the num corresponds to the point
 // first point is (-2000, 2000, -2000)
-// manipulating these values changes the location of the points
-// if i add an extra point, it doesn't crash, but the screen is black, all of my points disappear
-// if i remove a point, Fatal error: RDP: load_tile: size = 0
-  // changing the amount of times looppoint runs does not affect the error
-  // removing all commands in the RDP section does not affect the error
-  // so the error is originating somewhere where i am processing points
-  // i think it might have to do with lqv, which process 16 bytes at a times
-  // also might need to edit the matrices?
-  // edit the amount of times we do matrix 3d -> 2d transformations
-  // does it not fail because the registers are just full of junk? in that case shouldn't I not get that tile size error?
-  // does a tile need four corners? is that why I am getting the error?
-  // should I try to go from 8 points to 4 points rather than from 8 to 7
-    // assembly tends to like mulitples of 4, it might be easier to try to figure it out that way
+// changed points 7, 8 to (0,0,0)
 PointX:
-  dh -2000,  1000, -1000,  1000, -3000, 1000, -1000, 1000  // 8 * Point X (S15) (Signed Integer)
+  dh -1000,  1000, 0,  -1000, 1000, 0, 0, 0 // 8 * Point X (S15) (Signed Integer)
 PointY:
-  dh  2000,  1000, -2000, -1000,  1000, 1000, -400, 1000 // 8 * Point Y (S15) (Signed Integer)
+  dh  0,  0, -1000, 0,  0, -1000, 0, 0 // 8 * Point Y (S15) (Signed Integer)
 PointZ:
-  dh -2000, -1000, -1000, -1000,  1000, 1000,  1000, 1000 // 8 * Point Z (S15) (Signed Integer)
+  dh -1000, -1000, -1000, 2000,  2000, 2000,  0, 0 // 8 * Point Z (S15) (Signed Integer)
 
 // there must be a reason that there are 8 values here and 8 points, would assume this changes when num of points changes too
 HALF_SCREEN_XY_FOV:
@@ -262,37 +246,30 @@ arch n64.rdp
   Set_Other_Modes SAMPLE_TYPE|BI_LERP_0|ALPHA_DITHER_SEL_NO_DITHER|B_M1A_0_2|IMAGE_READ_EN|Z_SOURCE_SEL|Z_COMPARE_EN|Z_UPDATE_EN // Set Other Modes
   Set_Combine_Mode $0,$00, 0,0, $1,$01, $0,$F, 1,0, 0,0,0, 7,7,7 // Set Combine Mode: SubA RGB0,MulRGB0, SubA Alpha0,MulAlpha0, SubA RGB1,MulRGB1, SubB RGB0,SubB RGB1, SubA Alpha1,MulAlpha1, AddRGB0,SubB Alpha0,AddAlpha0, AddRGB1,SubB Alpha1,AddAlpha1
 
-  Set_Blend_Color $FF0000FF // Set Blend Color: R 255,G 0,B 0,A 255
+    // the order of these colors is the order of the points
+  Set_Blend_Color HOT_PINK32 // Set Blend Color: R 255,G 0,B 0,A 255
 RectangleZ:
   Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
 RectangleXY:
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
-  Set_Blend_Color $00FF00FF // Set Blend Color: R 0,G 255,B 0,A 255
+  Set_Blend_Color SKY_BLUE32 // Set Blend Color: R 0,G 255,B 0,A 255
   Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
-  Set_Blend_Color $0000FFFF // Set Blend Color: R 0,G 0,B 255,A 255
+  Set_Blend_Color LIME_GREEN32 // Set Blend Color: R 0,G 0,B 255,A 255
   Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
-  Set_Blend_Color $FFFFFFFF // Set Blend Color: R 255,G 255,B 255,A 255
+  Set_Blend_Color RED32 // Set Blend Color: R 255,G 255,B 255,A 255
   Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
-  Set_Blend_Color $800000FF // Set Blend Color: R 128,G 0,B 0,A 255
+  Set_Blend_Color WHITE32 // Set Blend Color: R 128,G 0,B 0,A 255
   Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
-  Set_Blend_Color $008000FF // Set Blend Color: R 0,G 128,B 0,A 255
-  Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
-  Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
-
-  Set_Blend_Color $000080FF // Set Blend Color: R 0,G 0,B 128,A 255
-  Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
-  Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
-
-  Set_Blend_Color $808080FF // Set Blend Color: R 128,G 128,B 128,A 255
+  Set_Blend_Color PURPLE32 // Set Blend Color: R 0,G 128,B 0,A 255
   Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
