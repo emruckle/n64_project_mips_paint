@@ -25,7 +25,7 @@
       // assembly tends to like mulitples of 4, it might be easier to try to figure it out that way
 arch n64.cpu
 endian msb
-output "RSPTrans3DRectangle.N64", create
+output "Emma3DTriangle.N64", create
 fill 1052672 // Set ROM Size
 
 origin $00000000
@@ -46,7 +46,6 @@ Start:
   ScreenNTSC(320, 240, BPP16, $A0100000) // Screen NTSC: 320x240, 16BPP, DRAM Origin $A0100000
 
   SetXBUS() // RDP Status: Set XBUS (Switch To RSP DMEM For RDP Commands)
-  //
 
   // Load RSP Code To IMEM, loading commands into IMEM
   DMASPRD(RSPCode, RSPCodeEnd, SP_IMEM) // DMA Data Read DRAM->RSP MEM: Start Address, End Address, Destination RSP MEM Address
@@ -79,8 +78,6 @@ RSPStart:
 // Load Point X,Y,Z, loads all the x points, all the y points, all the z points into vector registers
 // i think this is part of the removing or adding points problem
 // lqv moves 16 bytes
-// lqv loads multiple ints into the vecors at once
-// tried to remove points and edit this with offsets, was not working correctly but might be the right idea
 // so dh is 2 bytes, so this moves 8 points
   lqv v0[e0],PointX(r0) // V0 = Point X ($000)
   lqv v1[e0],PointY(r0) // V1 = Point Y ($010)
@@ -135,9 +132,6 @@ RSPStart:
 
   vrcp v3[e3],v8[e5] // Result Fraction (Zero), Source Integer (Z5)
   vrcph v9[e5],v3[e3] // Result Integer, Source Fraction (Zero)
-
-  vrcp v3[e3],v8[e6] // Result Fraction (Zero), Source Integer (Z6)
-  vrcph v9[e6],v3[e3] // Result Integer, Source Fraction (Zero)
 
   // assuming this have to do with the camera?
   vmulf v6,v9[e0] // X = X / Z + (ScreenX / 2)
@@ -205,15 +199,19 @@ base $0000 // Set Base Of RSP Data Object To Zero
 // the pos of the num corresponds to the point
 // first point is (-2000, 2000, -2000)
 // changed points 7, 8 to (0,0,0)
+// birds eye view of these points
+// triangular prism from desmos multiple by 1000
 PointX:
-  dh -1000,  1000, 0,  -1000, 1000, 0, 0, 0 // 8 * Point X (S15) (Signed Integer)
+  dh 0,  1000, -1000,  -2000, -1000, -3000, 0, 0 // 8 * Point X (S15) (Signed Integer)
 PointY:
-  dh  0,  0, -1000, 0,  0, -1000, 0, 0 // 8 * Point Y (S15) (Signed Integer)
+  dh  1000,  0, 2000, -1000,  -2000, 0, 0, 0 // 8 * Point Y (S15) (Signed Integer)
 PointZ:
-  dh -1000, -1000, -1000, 2000,  2000, 2000,  0, 0 // 8 * Point Z (S15) (Signed Integer)
+  dh 1000, 0, 0, 1,  0, 0,  0, 0 // 8 * Point Z (S15) (Signed Integer)
 
 // there must be a reason that there are 8 values here and 8 points, would assume this changes when num of points changes too
-HALF_SCREEN_XY_FOV:
+HALF_SCREEN_XY_FOV: // half screen xy fov
+  // changing FOV changes size of field of view screen.. this makes sense!
+  // changing the 0s here changes NOTHING
   dh 160, 120, 400, 0, 0, 0, 0, 0 // Screen X / 2 (S15) (Signed Integer), Screen Y / 2 (S15) (Signed Integer), FOV (Signed Fraction), Zero Const
 
 // i think this might scale the points?
@@ -221,7 +219,7 @@ MatrixRow01XYZT:
   dh 1,0,0,0 // Row 0 X,Y,Z,T (S15) (Signed Integer) (X)
   dh 0,1,0,0 // Row 1 X,Y,Z,T (S15) (Signed Integer) (Y)
 MatrixRow23XYZT:
-  dh 0,0,1,4000 // Row 2 X,Y,Z,T (S15) (Signed Integer) (Z) // 4000 is scaling my z
+  dh 0,0,1,4000 // Row 2 X,Y,Z,T (S15) (Signed Integer) (Z) // 4000 is scaling my z, the higher the number, the closer together my points appear? is it because they are actually just further away from the camera? or is it making the distance between values (the z val of the shape) bigger
   dh 0,0,0,1 // Row 3 X,Y,Z,T (S15) (Signed Integer) (T)
 
 align(8) // Align 64-Bit
