@@ -1,4 +1,28 @@
 // N64 'Bare Metal' RSP Transform 3D Rectangle Test by krom (Peter Lemon) edited by me
+// mixture of my comments and peter lemon's original comments
+// currents ideas: 
+  // is there a way to fix the "lag" with testing the RSP?
+    // when I change the RSP section, and remake the ROM, the visual I see does not always update when I run the ROM
+    // sometimes it does though? incredibly inconstent
+    // so I run a new ROM that should have changes but don't see any changes on the screen, gets confusing when I don't have a predicted outcome for my tests
+    // is this better console vs emulator? most of this work has been on emulators
+    // could another emulator be better? is it a MAME problem? try testing with ARES even though there is no debug mode
+    // could I create a "palette cleanser" program? that I could run in between running my ROMs 
+      // what would this program entail?
+  // these are also down by the point arrays:
+    // if i add an extra point, it doesn't crash, but the screen is black, all of my points disappear
+    // if i remove a point, Fatal error: RDP: load_tile: size = 0
+    // changing the amount of times LoopPoint runs does not affect the error
+    // removing all commands in the RDP section does not affect the error
+      // only way to avoid the error is do never interact with the RDP, comment out the call to start the mem transfer
+    // so the error is originating somewhere where i am processing points
+    // i think it might have to do with lqv, which process 16 bytes at a times
+    // also might need to edit the matrices?
+    // edit the amount of times we do matrix 3d -> 2d transformations
+    // does it not fail because the registers are just full of junk? in that case shouldn't I not get that tile size error?
+    // does a tile need four corners? is that why I am getting the error?
+    // should I try to go from 8 points to 4 points rather than from 8 to 7?
+      // assembly tends to like mulitples of 4, it might be easier to try to figure it out that way
 arch n64.cpu
 endian msb
 output "Emma3DTriangle.N64", create
@@ -6,6 +30,7 @@ fill 1052672 // Set ROM Size
 
 origin $00000000
 base $80000000 // Entry Point Of Code
+// includes
 include "../LIB/N64.INC" // Include N64 Definitions
 include "../LIB/COLORS32.INC" // include 32 bit colors for ease of testing 
 include "N64_HEADER.ASM" // Include 64 Byte Header & Vector Table
@@ -16,10 +41,17 @@ Start:
   include "../LIB/N64_RSP.INC" // Include RSP Macros
   include "../LIB/N64_INPUT.INC" // Include Input Macros
 
+  // intialization
   N64_INIT() // Run N64 Initialisation Routine
 
+  // init screen
   ScreenNTSC(320, 240, BPP16, $A0100000) // Screen NTSC: 320x240, 16BPP, DRAM Origin $A0100000
 
+
+  // communicating through DMEM... need to review DMEM and how RDP reads from DMEM
+    // bet its a macro? 
+  // RDP will fetch commands from the RSP's DMEM 
+  // has to do with getting points from memory?
   SetXBUS() // RDP Status: Set XBUS (Switch To RSP DMEM For RDP Commands)
 
   // Load RSP Code To IMEM, loading commands into IMEM
@@ -222,35 +254,25 @@ arch n64.rdp
   Set_Combine_Mode $0,$00, 0,0, $1,$01, $0,$F, 1,0, 0,0,0, 7,7,7 // Set Combine Mode: SubA RGB0,MulRGB0, SubA Alpha0,MulAlpha0, SubA RGB1,MulRGB1, SubB RGB0,SubB RGB1, SubA Alpha1,MulAlpha1, AddRGB0,SubB Alpha0,AddAlpha0, AddRGB1,SubB Alpha1,AddAlpha1
 
     // the order of these colors is the order of the points
-  Set_Blend_Color RED32 // Set Blend Color: R 255,G 0,B 0,A 255
+  Set_Blend_Color HOT_PINK32 // Set Blend Color: R 255,G 0,B 0,A 255
 RectangleZ:
   Set_Prim_Depth 10000,10000 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
 RectangleXY:
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
-  Set_Blend_Color ORANGE32 // Set Blend Color: R 0,G 255,B 0,A 255
+  Set_Blend_Color SKY_BLUE32 // Set Blend Color: R 0,G 255,B 0,A 255
   Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
-  Set_Blend_Color YELLOW32 // Set Blend Color: R 0,G 0,B 255,A 255
+  Set_Blend_Color LIME_GREEN32 // Set Blend Color: R 0,G 0,B 255,A 255
   Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
-  // Faces
-  // Sync_Pipe
-  //Set_Other_Modes CYCLE_TYPE_FILL
-  // SHOULD NOT BE DRAWING YELLOW!! pipeline sync issue... but where? I'm syncing it
-  //Set_Blend_Color YELLOW32 // Set Fill Color: PACKED COLOR 32B R8G8B8A8 Pixel
-  
-  //Sync_Pipe
- //Fill_Rectangle 47<<2,24<<2, 13<<2,5<<2
-  //Sync_Pipe
-
-  Set_Blend_Color GREEN32 // Set Blend Color: R 255,G 255,B 255,A 255
+  Set_Blend_Color RED32 // Set Blend Color: R 255,G 255,B 255,A 255
   Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
-  Set_Blend_Color BLUE32 // Set Blend Color: R 128,G 0,B 0,A 255
+  Set_Blend_Color WHITE32 // Set Blend Color: R 128,G 0,B 0,A 255
   Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
@@ -258,15 +280,31 @@ RectangleXY:
   Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
   Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
 
-  Set_Blend_Color WHITE32 // Set Blend Color: R 0,G 128,B 0,A 255
-  Set_Prim_Depth 0,0 // Set Primitive Depth: PRIMITIVE Z,PRIMITIVE DELTA Z
-  Fill_Rectangle 0,0, 0,0 // Fill Rectangle: XL,YL, XH,YH
+  // Beginning of me working on adding faces to the prism
+  //Sync_Pipe
+  //Set_Other_Modes CYCLE_TYPE_FILL
+  //Sync_Pipe
+  // SHOULD NOT BE DRAWING YELLOW!! pipeline sync issue
+  //Set_Fill_Color HOT_PINK32 // Set Fill Color: PACKED COLOR 32B R8G8B8A8 Pixel
+  //Fill_Rectangle 47<<2,24<<2, 13<<2,5<<2 // Fill Rectangle: XL 179.0,YL 139.0, XH 16.0,YH 8.0
 
-  Fill_Rectangle 47<<2,24<<2, 13<<2,5<<2
 
-  Sync_Full // Ensure Entire Scene Is Fully Drawn
+  Sync_Full // Ensure�Entire�Scene�Is�Fully�Drawn
 RDPBufferEnd:
 
 align(8) // Align 64-Bit
 base RSPData+pc() // Set End Of RSP Data Object
 RSPDataEnd:
+
+PIF1:
+  dw $FF010401,0
+  dw 0,0
+  dw 0,0
+  dw 0,0
+  dw $FE000000,0
+  dw 0,0
+  dw 0,0
+  dw 0,1
+
+PIF2:
+  fill 64 // Generate 64 Bytes Containing $00
