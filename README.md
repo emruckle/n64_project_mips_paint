@@ -10,6 +10,8 @@
   - coprocessors (RCP, RDRAM, PIF-NUS, Video Dac), DMA, I/O interfaces (VI, AI, MI, PI, SI, RI), joybus protocol, controllers
   - brain dump (everything post drawing lines -> RDP)
   - RDP 2D exploration
+- google doc notes: https://docs.google.com/document/d/1HOYfRG7q-csIVp8-PZrOpD7NUKDugPOONLr8jj76Mj4/edit?usp=sharing
+  - RDP, RCP, 3D rendering
 - notion online resource list: [https://likeable-asphalt-1dd.notion.site/N64-Resources-4ce68d1f433b42e9bb5b58bf955faebf?pvs=4](https://likeable-asphalt-1dd.notion.site/N64-Resources-4ce68d1f433b42e9bb5b58bf955faebf?pvs=4)
   - sources organized with titles, tags, comments and urls
 - notion organizational dashboard
